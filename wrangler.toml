@@ -1,7 +1,7 @@
 # Cloudflare Workers configuration for a static SPA.
 # `wrangler deploy` uploads the built site as static assets.
 # Cloudflare Pages is deprecated (2026); Workers is the supported path.
-name = "inane-www"
+name = "www"
 compatibility_date = "2026-08-16"
 
 [assets]

@@ -9,7 +9,8 @@ This site is a static React Router SPA. `npm run build` outputs everything to
 
 ## Prerequisites
 
-- A GitHub repository containing this code (it is one).
+- The GitHub repository [`inane-tools/www`](https://github.com/inane-tools/www)
+  containing this code.
 - A Cloudflare account.
 - Node.js `>= 22.12` (the repo pins `22` via `.nvmrc`).
 
@@ -30,7 +31,7 @@ The repo includes `.github/workflows/deploy.yml`, which builds and deploys via
    | `CLOUDFLARE_ACCOUNT_ID` | your Cloudflare account ID (dashboard homepage) |
 
 3. Push to `main` — the workflow installs, builds (`npm run build`), and runs
-   `wrangler deploy`. The first deploy creates the `inane-www` Worker
+   `wrangler deploy`. The first deploy creates the `www` Worker
    automatically; no pre-created project is needed.
 
    The Worker name comes from `name` in `wrangler.toml`. If you change it,
