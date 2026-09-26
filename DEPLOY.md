@@ -14,9 +14,9 @@ This site is a static React Router SPA. `npm run build` outputs everything to
 - A Cloudflare account.
 - Node.js `>= 22.12` (the repo pins `22` via `.nvmrc`).
 
-## Option A — GitHub Actions (automated CI)
+## Option A: GitHub Actions (automated CI)
 
-The repo includes `.github/workflows/deploy.yml`, which builds and deploys via
+Add a workflow at `.github/workflows/deploy.yml` that builds and deploys via
 `cloudflare/wrangler-action` on every push to `main`.
 
 1. Create an API token in Cloudflare (**My Profile → API Tokens**) with the
@@ -30,14 +30,14 @@ The repo includes `.github/workflows/deploy.yml`, which builds and deploys via
    | `CLOUDFLARE_API_TOKEN` | the API token from step 1 |
    | `CLOUDFLARE_ACCOUNT_ID` | your Cloudflare account ID (dashboard homepage) |
 
-3. Push to `main` — the workflow installs, builds (`npm run build`), and runs
+3. Push to `main`. The workflow installs, builds (`npm run build`), and runs
    `wrangler deploy`. The first deploy creates the `www` Worker
    automatically; no pre-created project is needed.
 
    The Worker name comes from `name` in `wrangler.toml`. If you change it,
    update `wrangler.toml`; the workflow does not hardcode a name.
 
-## Option B — Deploy manually
+## Option B: Deploy manually
 
 ```bash
 npm ci
@@ -50,7 +50,7 @@ environment (or run `npx wrangler login` first).
 
 ## Why there are no routing changes
 
-The SPA needs any unknown path (for example `/apps/vibepad`) to return
+The SPA needs any unknown path (a mistyped URL, for example) to return
 `index.html`. That is handled by Cloudflare's built-in SPA fallback:
 
 ```toml
@@ -58,7 +58,7 @@ The SPA needs any unknown path (for example `/apps/vibepad`) to return
 not_found_handling = "single-page-application"
 ```
 
-Do **not** also add a `_redirects` file with `/* /index.html 200` — combining it
+Do **not** also add a `_redirects` file with `/* /index.html 200`; combining it
 with `not_found_handling` causes an infinite redirect loop.
 
 ## Custom domain (optional)

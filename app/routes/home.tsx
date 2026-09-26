@@ -1,7 +1,5 @@
-import { useState } from "react"
-import { Link } from "react-router"
-import { motion } from "motion/react"
-import { ArrowUpRight, ChevronLeft, ChevronRight } from "lucide-react"
+import type { ComponentType } from "react"
+import { AppWindow, Download, Palette, Pin } from "lucide-react"
 
 import {
   Accordion,
@@ -10,156 +8,224 @@ import {
   AccordionTrigger,
 } from "~/components/ui/accordion"
 import { Button } from "~/components/ui/button"
-import { Coverflow } from "~/components/home/coverflow"
+import { DiscordIcon } from "~/components/icons/discord-icon"
+import { HeroDither } from "~/components/layout/hero-dither"
+import { GitHubIcon } from "~/components/icons/github-icon"
+import { SiteFooter } from "~/components/layout/site-footer"
+import { SiteHeader } from "~/components/layout/site-header"
 import FadeContent from "~/components/react-bits/FadeContent/FadeContent"
-import { apps, type App } from "~/data/apps"
-import { site } from "~/data/site"
+import { site, type Feature } from "~/data/site"
 
-function ActiveAppInfo({
-  app,
-  index,
-  count,
-}: {
-  app: App
-  index: number
-  count: number
-}) {
-  return (
-    <motion.div
-      key={app.slug}
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
-      className="flex flex-col items-center text-center"
-    >
-      <div className="flex items-center gap-3 sm:gap-4">
-        <img
-          src={app.icon}
-          alt=""
-          className="size-10 rounded-xl border border-border shadow-sm sm:size-12"
-        />
-        <h1 className="font-heading text-4xl font-extrabold tracking-tight sm:text-5xl">
-          {app.name}
-        </h1>
-      </div>
-      <p className="mt-3 max-w-md text-sm text-pretty text-muted-foreground sm:text-base">
-        {app.blurb}
-      </p>
-      <Button asChild size="lg" className="mt-5 rounded-full px-6">
-        <Link to={`/apps/${app.slug}`}>
-          View app
-          <ArrowUpRight />
-        </Link>
-      </Button>
-      <p className="mt-4 text-xs text-muted-foreground">
-        {index + 1} / {count}
-      </p>
-    </motion.div>
-  )
+const FEATURE_ICONS: Record<
+  Feature["icon"],
+  ComponentType<{ className?: string }>
+> = {
+  discord: DiscordIcon,
+  palette: Palette,
+  custom: AppWindow,
+  pin: Pin,
 }
 
 export function meta() {
-  return [{ title: "inane.tools" }]
+  return [
+    { title: `${site.name} · ${site.tagline}` },
+    { name: "description", content: site.description },
+  ]
 }
 
 export default function Home() {
-  const [activeIndex, setActiveIndex] = useState(0)
-  const last = apps.length - 1
-
   return (
-    <main className="relative mx-auto flex min-h-svh w-full max-w-5xl flex-col items-center px-4 pb-40">
-      <section
-        id="apps"
-        className="flex min-h-svh w-full scroll-mt-6 flex-col items-center justify-center gap-8 sm:gap-10"
-      >
-        <div className="w-full">
-          <Coverflow
-            activeIndex={activeIndex}
-            onActiveChange={setActiveIndex}
-          />
-        </div>
+    <div className="relative min-h-svh overflow-x-hidden">
+      <SiteHeader />
 
-        <div className="flex w-full max-w-2xl items-center justify-center gap-4 sm:gap-8">
-          <Button
-            variant="outline"
-            size="icon"
-            className="size-10 shrink-0 rounded-full"
-            aria-label="Previous app"
-            disabled={activeIndex === 0}
-            onClick={() => setActiveIndex(activeIndex - 1)}
-          >
-            <ChevronLeft className="size-5" />
-          </Button>
+      <main>
+        {/* Hero */}
+        <section
+          id="top"
+          className="relative -mt-16 flex min-h-svh flex-col overflow-hidden"
+        >
+          <HeroDither />
 
-          <ActiveAppInfo
-            app={apps[activeIndex]}
-            index={activeIndex}
-            count={apps.length}
-          />
+          <div className="pointer-events-none relative z-10 mx-auto flex w-full max-w-5xl flex-1 flex-col items-center justify-center px-5 pt-24 pb-20 text-center">
+            <FadeContent blur duration={900} className="w-full">
+              <div className="mx-auto w-full max-w-3xl overflow-hidden rounded-[8px] border border-border/70 shadow-2xl shadow-black/50">
+                <img
+                  src="/screenshot.png"
+                  alt="The Cherry app playing a track"
+                  className="w-full"
+                />
+              </div>
+            </FadeContent>
 
-          <Button
-            variant="outline"
-            size="icon"
-            className="size-10 shrink-0 rounded-full"
-            aria-label="Next app"
-            disabled={activeIndex === last}
-            onClick={() => setActiveIndex(activeIndex + 1)}
-          >
-            <ChevronRight className="size-5" />
-          </Button>
-        </div>
-      </section>
+            <FadeContent blur delay={150} duration={900} className="mt-10">
+              <h1 className="mx-auto max-w-3xl text-5xl leading-[1.02] tracking-tight text-balance sm:text-6xl">
+                {site.tagline}
+              </h1>
 
-      <section id="faq" className="mt-28 flex w-full scroll-mt-6 flex-col">
-        <FadeContent blur delay={100} duration={900}>
-          <h2 className="mb-8 font-heading text-3xl font-bold tracking-tight">
-            Questions &amp; answers
-          </h2>
-        </FadeContent>
+              <p className="mx-auto mt-5 max-w-xl text-lg leading-relaxed text-pretty text-muted-foreground">
+                {site.intro}
+              </p>
 
-        <FadeContent blur delay={200} duration={900}>
-          <Accordion type="single" collapsible className="w-full">
-            {site.faq.map((item, i) => (
-              <AccordionItem key={i} value={`item-${i}`}>
-                <AccordionTrigger>{item.question}</AccordionTrigger>
-                <AccordionContent className="text-muted-foreground">
-                  {item.answer}
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
-        </FadeContent>
-      </section>
-
-      <section id="info" className="mt-28 flex w-full scroll-mt-6 flex-col">
-        <FadeContent blur delay={100} duration={900}>
-          <h2 className="mb-4 font-heading text-3xl font-bold tracking-tight">
-            About
-          </h2>
-          <p className="max-w-2xl text-base leading-relaxed text-pretty text-muted-foreground">
-            {site.about}
-          </p>
-        </FadeContent>
-
-        <FadeContent blur delay={200} duration={900}>
-          <div className="mt-8 flex flex-wrap items-center gap-2">
-            {site.links.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                target={link.href.startsWith("http") ? "_blank" : undefined}
-                rel="noreferrer"
-                className="rounded-full border border-border bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-muted"
-              >
-                {link.label}
-              </a>
-            ))}
+              <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+                <Button
+                  asChild
+                  size="lg"
+                  className="pointer-events-auto h-11 rounded-lg border border-white/15 bg-[linear-gradient(180deg,#ff6b7a,#e0344a)] px-6 text-[0.95rem] text-white shadow-lg shadow-primary/25 hover:brightness-110"
+                >
+                  <a href={site.releases} target="_blank" rel="noreferrer">
+                    <Download />
+                    Download for Windows
+                  </a>
+                </Button>
+                <Button
+                  asChild
+                  size="lg"
+                  variant="outline"
+                  className="pointer-events-auto h-11 rounded-lg border border-border/70 bg-[linear-gradient(180deg,rgba(255,255,255,0.10),rgba(255,255,255,0.02))] px-6 text-[0.95rem] backdrop-blur-md hover:border-border hover:bg-[linear-gradient(180deg,rgba(255,255,255,0.15),rgba(255,255,255,0.04))]"
+                >
+                  <a href={site.repo} target="_blank" rel="noreferrer">
+                    <GitHubIcon className="size-4" />
+                    View source
+                  </a>
+                </Button>
+              </div>
+            </FadeContent>
           </div>
-          <p className="mt-10 text-xs text-muted-foreground">
-            © {new Date().getFullYear()} {site.name}. made with 💜 in finland
-          </p>
-        </FadeContent>
-      </section>
-    </main>
+        </section>
+
+        {/* FAQ */}
+        <section
+          id="faq"
+          className="mx-auto w-full max-w-3xl scroll-mt-24 px-5 pt-24"
+        >
+          <FadeContent blur duration={800}>
+            <h2 className="text-3xl tracking-tight text-balance sm:text-4xl">
+              What, Why, Who?
+            </h2>
+          </FadeContent>
+
+          <FadeContent blur delay={150} duration={800} className="mt-8">
+            <Accordion type="single" collapsible className="w-full">
+              {site.faq.map((item, i) => (
+                <AccordionItem key={i} value={`item-${i}`}>
+                  <AccordionTrigger className="py-4 text-lg">
+                    {item.question}
+                  </AccordionTrigger>
+                  <AccordionContent className="h-auto text-[0.95rem] leading-relaxed text-muted-foreground">
+                    {item.answer}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </FadeContent>
+        </section>
+
+        {/* Features */}
+        <section
+          id="features"
+          className="mx-auto w-full max-w-3xl scroll-mt-24 px-5 pt-24"
+        >
+          <FadeContent blur duration={800}>
+            <h2 className="text-3xl tracking-tight text-balance sm:text-4xl">
+              Features
+            </h2>
+          </FadeContent>
+
+          <div className="mt-8 flex flex-col gap-4">
+            {site.features.map((feature, i) => {
+              const Icon = FEATURE_ICONS[feature.icon]
+              return (
+                <FadeContent
+                  key={feature.title}
+                  blur
+                  delay={i * 80}
+                  duration={800}
+                >
+                  <div className="flex items-start gap-4 rounded-2xl border border-border/70 bg-card/60 p-6 backdrop-blur-xl">
+                    <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary ring-1 ring-primary/20">
+                      <Icon className="size-5" />
+                    </span>
+                    <div>
+                      <h3 className="text-lg tracking-tight">
+                        {feature.title}
+                      </h3>
+                      <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+                        {feature.body}
+                      </p>
+                    </div>
+                  </div>
+                </FadeContent>
+              )
+            })}
+          </div>
+        </section>
+
+        {/* Closing */}
+        <section className="mx-auto w-full max-w-3xl px-5 pt-24">
+          <FadeContent blur duration={800}>
+            <div className="cherry-card relative overflow-hidden rounded-3xl border border-border/70 px-8 py-14 text-center sm:px-12">
+              <div className="flex flex-col items-center gap-6">
+                <img src="/icons/cherry.png" alt="" className="h-12 w-auto" />
+                <h2 className="text-3xl tracking-tight text-balance sm:text-4xl">
+                  Check it out
+                </h2>
+                <p className="max-w-sm text-pretty text-muted-foreground">
+                  The source is on GitHub. Windows-only for now.
+                </p>
+                <div className="flex flex-wrap justify-center gap-3">
+                  <Button
+                    asChild
+                    size="lg"
+                    className="h-11 rounded-lg border border-white/15 bg-[linear-gradient(180deg,#ff6b7a,#e0344a)] px-6 text-[0.95rem] text-white shadow-lg shadow-primary/25 hover:brightness-110"
+                  >
+                    <a href={site.releases} target="_blank" rel="noreferrer">
+                      <Download />
+                      Download
+                    </a>
+                  </Button>
+                  <Button
+                    asChild
+                    size="lg"
+                    variant="outline"
+                    className="h-11 rounded-lg border border-border/70 bg-[linear-gradient(180deg,rgba(255,255,255,0.10),rgba(255,255,255,0.02))] px-6 text-[0.95rem] backdrop-blur-md hover:border-border hover:bg-[linear-gradient(180deg,rgba(255,255,255,0.15),rgba(255,255,255,0.04))]"
+                  >
+                    <a href={site.repo} target="_blank" rel="noreferrer">
+                      <GitHubIcon className="size-4" />
+                      View source
+                    </a>
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </FadeContent>
+        </section>
+
+        {/* Highlight */}
+        <section className="mx-auto w-full max-w-3xl px-5 pt-12">
+          <FadeContent blur duration={800}>
+            <div className="cherry-playerbar mx-auto flex w-full max-w-md items-center gap-3 rounded-xl border border-border/70 p-3 text-left backdrop-blur-md">
+              <img
+                src={site.highlight.image}
+                alt=""
+                className="size-14 shrink-0 rounded-lg object-cover ring-1 ring-white/10"
+              />
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm font-medium">
+                  {site.highlight.title}
+                </p>
+                <p className="truncate text-xs text-muted-foreground">
+                  {site.highlight.artist}
+                </p>
+                <div className="mt-2 h-1 w-full overflow-hidden rounded-full bg-white/10">
+                  <div className="h-full w-1/3 rounded-full bg-[linear-gradient(90deg,#ff6b7a,#ff8a5c)]" />
+                </div>
+              </div>
+            </div>
+          </FadeContent>
+        </section>
+      </main>
+
+      <SiteFooter />
+    </div>
   )
 }

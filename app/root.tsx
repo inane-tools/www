@@ -8,41 +8,26 @@ import {
 } from "react-router"
 
 import type { Route } from "./+types/root"
-import { BottomNav } from "~/components/layout/bottom-nav"
-import { ThemeProvider } from "~/components/layout/theme-provider"
 import { site } from "~/data/site"
 import "./app.css"
 
-const themeInitScript = `(function(){try{var s=localStorage.getItem("theme");if(!s){s=window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}if(s==="dark"){document.documentElement.classList.add("dark")}}catch(e){}})()`
-
 export const links: Route.LinksFunction = () => [
-  { rel: "preconnect", href: "https://fonts.googleapis.com" },
-  {
-    rel: "preconnect",
-    href: "https://fonts.gstatic.com",
-    crossOrigin: "anonymous",
-  },
+  { rel: "icon", type: "image/png", href: "/icons/cherry.png" },
 ]
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className="dark" suppressHydrationWarning>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta
-          name="description"
-          content={`${site.tagline} ${site.about}`.slice(0, 160)}
-        />
+        <meta name="theme-color" content="#0a0607" />
+        <meta name="description" content={site.description} />
         <Meta />
         <Links />
-        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
       <body>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {children}
-          <BottomNav />
-        </ThemeProvider>
+        {children}
         <ScrollRestoration />
         <Scripts />
       </body>
@@ -71,11 +56,11 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   }
 
   return (
-    <main className="container mx-auto p-4 pt-16 pb-40">
-      <h1>{message}</h1>
-      <p>{details}</p>
+    <main className="mx-auto flex min-h-svh max-w-xl flex-col items-center justify-center px-5 text-center">
+      <h1 className="font-heading text-5xl font-semibold">{message}</h1>
+      <p className="mt-3 text-muted-foreground">{details}</p>
       {stack && (
-        <pre className="w-full overflow-x-auto p-4">
+        <pre className="mt-6 w-full overflow-x-auto rounded-xl border border-border bg-card p-4 text-left text-xs">
           <code>{stack}</code>
         </pre>
       )}

@@ -6,5 +6,8 @@ node_modules
 .react-router
 build
 
+# Cloudflare
+.wrangler
+
 # typescript
 *.tsbuildinfo
