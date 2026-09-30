@@ -4,7 +4,7 @@ export type FAQ = {
 }
 
 export type Feature = {
-  icon: "discord" | "palette" | "custom" | "pin"
+  icon: "discord" | "palette" | "custom" | "pin" | "scrobble" | "playlist"
   title: string
   body: string
 }
@@ -16,6 +16,9 @@ export const site = {
     "A simple YouTube Music desktop app with a nice user experience, less features, but nicer for actual listening.",
   intro:
     "A simple YouTube Music desktop app with a nice user experience, less features, but nicer for actual listening.",
+
+  url: "https://inane.tools",
+  ogImage: "/og.jpg",
 
   repo: "https://github.com/inane-tools/cherry",
   releases: "https://github.com/inane-tools/cherry/releases/latest",
@@ -32,24 +35,34 @@ export const site = {
 
   features: [
     {
-      icon: "discord",
-      title: "Discord Rich Presence",
-      body: "Whatever you're playing shows on your Discord profile, album art and all, with a live progress bar.",
-    },
-    {
-      icon: "palette",
-      title: "A UI that follows the album art",
-      body: "Cherry pulls its highlight colour from the cover of the current song, so the whole interface shifts with the music.",
-    },
-    {
       icon: "custom",
       title: "A real frontend, not a wrapper",
       body: "Cherry doesn't wrap the YouTube Music web player. It's a completely custom frontend talking straight to YouTube Music.",
     },
     {
+      icon: "discord",
+      title: "Discord Rich Presence",
+      body: "Whatever you're playing shows on your Discord profile, album art and all, with a live progress bar.",
+    },
+    {
+      icon: "scrobble",
+      title: "Last.fm scrobbling",
+      body: "Scrobble what you listen to straight to Last.fm, so your listening history stays in one place.",
+    },
+    {
+      icon: "palette",
+      title: "Themed based on your music",
+      body: "Cherry pulls its highlight colour from the cover of the current song, so the interface shifts with your music. There's a light theme too.",
+    },
+    {
       icon: "pin",
       title: "Pin your favorite playlists",
       body: "Keep the playlists you use most pinned to the top of the window, so they're always one click away.",
+    },
+    {
+      icon: "playlist",
+      title: "Create and edit playlists",
+      body: "Build and change your own playlists without ever leaving Cherry, so your library is yours to shape.",
     },
   ] satisfies Feature[],
 

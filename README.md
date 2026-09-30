@@ -36,6 +36,7 @@ Assets in `public/`:
 - `inane.svg`: the inane wordmark
 - `metal_pipe.jpg`: the song-highlight art
 - `screenshot.png`: the hero screenshot
+- `og.jpg`: the Open Graph / embed card (1200×630)
 
 ## Adding shadcn components
 

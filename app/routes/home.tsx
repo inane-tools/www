@@ -1,5 +1,5 @@
 import type { ComponentType } from "react"
-import { AppWindow, Download, Palette, Pin } from "lucide-react"
+import { AppWindow, Download, ListMusic, Palette, Pin } from "lucide-react"
 
 import {
   Accordion,
@@ -9,12 +9,14 @@ import {
 } from "~/components/ui/accordion"
 import { Button } from "~/components/ui/button"
 import { DiscordIcon } from "~/components/icons/discord-icon"
+import { LastfmIcon } from "~/components/icons/lastfm-icon"
 import { HeroDither } from "~/components/layout/hero-dither"
 import { GitHubIcon } from "~/components/icons/github-icon"
 import { SiteFooter } from "~/components/layout/site-footer"
 import { SiteHeader } from "~/components/layout/site-header"
 import FadeContent from "~/components/react-bits/FadeContent/FadeContent"
 import { site, type Feature } from "~/data/site"
+import type { Route } from "./+types/home"
 
 const FEATURE_ICONS: Record<
   Feature["icon"],
@@ -24,18 +26,65 @@ const FEATURE_ICONS: Record<
   palette: Palette,
   custom: AppWindow,
   pin: Pin,
+  scrobble: LastfmIcon,
+  playlist: ListMusic,
 }
 
+const jsonLd = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: site.name,
+  applicationCategory: "MultimediaApplication",
+  operatingSystem: "Windows",
+  description: site.description,
+  url: site.url,
+  image: `${site.url}${site.ogImage}`,
+  downloadUrl: site.releases,
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  author: {
+    "@type": "Organization",
+    name: site.maker.name,
+    url: site.maker.href,
+  },
+})
+
 export function meta() {
+  const title = `${site.name} · ${site.tagline}`
+  const image = `${site.url}${site.ogImage}`
+  const alt = `${site.name} · ${site.tagline}`
   return [
-    { title: `${site.name} · ${site.tagline}` },
+    { title },
     { name: "description", content: site.description },
+    { property: "og:type", content: "website" },
+    { property: "og:site_name", content: site.name },
+    { property: "og:title", content: title },
+    { property: "og:description", content: site.description },
+    { property: "og:url", content: site.url },
+    { property: "og:image", content: image },
+    { property: "og:image:width", content: "1200" },
+    { property: "og:image:height", content: "630" },
+    { property: "og:image:alt", content: alt },
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:site", content: "@inanetools" },
+    { name: "twitter:creator", content: "@inanetools" },
+    { name: "twitter:title", content: title },
+    { name: "twitter:description", content: site.description },
+    { name: "twitter:image", content: image },
+    { name: "twitter:image:alt", content: alt },
   ]
 }
+
+export const links: Route.LinksFunction = () => [
+  { rel: "canonical", href: site.url },
+]
 
 export default function Home() {
   return (
     <div className="relative min-h-svh overflow-x-hidden">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLd }}
+      />
       <SiteHeader />
 
       <main>
