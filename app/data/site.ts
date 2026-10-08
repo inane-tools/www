@@ -4,9 +4,17 @@ export type FAQ = {
 }
 
 export type Feature = {
-  icon: "discord" | "palette" | "custom" | "pin" | "scrobble" | "playlist"
+  icon:
+    | "discord"
+    | "palette"
+    | "custom"
+    | "pin"
+    | "scrobble"
+    | "playlist"
+    | "folders"
   title: string
   body: string
+  image?: string
 }
 
 export const site = {
@@ -18,7 +26,7 @@ export const site = {
     "A simple YouTube Music desktop app with a nice user experience, less features, but nicer for actual listening.",
 
   url: "https://inane.tools",
-  ogImage: "/og.jpg",
+  ogImage: "/og.webp",
 
   repo: "https://github.com/inane-tools/cherry",
   releases: "https://github.com/inane-tools/cherry/releases/latest",
@@ -38,6 +46,7 @@ export const site = {
       icon: "custom",
       title: "A real frontend, not a wrapper",
       body: "Cherry doesn't wrap the YouTube Music web player. It's a completely custom frontend talking straight to YouTube Music.",
+      image: "/features/not-wrapper.webp",
     },
     {
       icon: "discord",
@@ -53,11 +62,18 @@ export const site = {
       icon: "palette",
       title: "Themed based on your music",
       body: "Cherry pulls its highlight colour from the cover of the current song, so the interface shifts with your music. There's a light theme too.",
+      image: "/features/theme.webp",
     },
     {
       icon: "pin",
       title: "Pin your favorite playlists",
       body: "Keep the playlists you use most pinned to the top of the window, so they're always one click away.",
+    },
+    {
+      icon: "folders",
+      title: "Organize with folders",
+      body: "Group playlists into folders so a large library stays tidy and quick to browse.",
+      image: "/features/folders.webp",
     },
     {
       icon: "playlist",
@@ -73,7 +89,7 @@ export const site = {
   highlight: {
     title: "falling metal pipe sound effect 10 hours",
     artist: "downloadfreesoundeffects",
-    image: "/metal_pipe.jpg",
+    image: "/metal_pipe.webp",
   },
 
   faq: [

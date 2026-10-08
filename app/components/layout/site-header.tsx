@@ -17,7 +17,13 @@ export function SiteHeader() {
           aria-label={`${site.name} home`}
           className="flex items-center gap-2"
         >
-          <img src="/icons/cherry.png" alt="" className="h-7 w-auto" />
+          <img
+            src="/icons/cherry.webp"
+            alt=""
+            width={773}
+            height={691}
+            className="h-7 w-auto"
+          />
           <span className="font-heading text-lg leading-none font-bold tracking-tight [font-stretch:115%]">
             {site.name}
           </span>

@@ -180,3 +180,21 @@
     animation: dither-fade 1.2s ease-out both;
 }
 
+/* The hero screenshot cross-fades to the compact-sidebar shot and back. */
+@keyframes screenshot-swap {
+    0%,
+    40% {
+        opacity: 0;
+    }
+    50%,
+    90% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+.screenshot-swap {
+    animation: screenshot-swap 12s ease-in-out infinite;
+}
+

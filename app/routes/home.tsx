@@ -1,5 +1,12 @@
 import type { ComponentType } from "react"
-import { AppWindow, Download, ListMusic, Palette, Pin } from "lucide-react"
+import {
+  AppWindow,
+  Download,
+  FolderTree,
+  ListMusic,
+  Palette,
+  Pin,
+} from "lucide-react"
 
 import {
   Accordion,
@@ -28,24 +35,51 @@ const FEATURE_ICONS: Record<
   pin: Pin,
   scrobble: LastfmIcon,
   playlist: ListMusic,
+  folders: FolderTree,
 }
 
 const jsonLd = JSON.stringify({
   "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  name: site.name,
-  applicationCategory: "MultimediaApplication",
-  operatingSystem: "Windows",
-  description: site.description,
-  url: site.url,
-  image: `${site.url}${site.ogImage}`,
-  downloadUrl: site.releases,
-  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-  author: {
-    "@type": "Organization",
-    name: site.maker.name,
-    url: site.maker.href,
-  },
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${site.url}/#organization`,
+      name: site.maker.name,
+      url: site.url,
+      logo: `${site.url}/icons/cherry.png`,
+      sameAs: [site.maker.href, site.maker.x, site.repo],
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${site.url}/#website`,
+      url: site.url,
+      name: site.name,
+      description: site.description,
+      publisher: { "@id": `${site.url}/#organization` },
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": `${site.url}/#app`,
+      name: site.name,
+      applicationCategory: "MultimediaApplication",
+      operatingSystem: "Windows",
+      description: site.description,
+      url: site.url,
+      image: `${site.url}${site.ogImage}`,
+      downloadUrl: site.releases,
+      offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+      publisher: { "@id": `${site.url}/#organization` },
+    },
+    {
+      "@type": "FAQPage",
+      "@id": `${site.url}/#faq`,
+      mainEntity: site.faq.map((item) => ({
+        "@type": "Question",
+        name: item.question,
+        acceptedAnswer: { "@type": "Answer", text: item.answer },
+      })),
+    },
+  ],
 })
 
 export function meta() {
@@ -55,12 +89,20 @@ export function meta() {
   return [
     { title },
     { name: "description", content: site.description },
+    { name: "author", content: site.maker.name },
+    {
+      name: "robots",
+      content:
+        "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+    },
     { property: "og:type", content: "website" },
     { property: "og:site_name", content: site.name },
     { property: "og:title", content: title },
     { property: "og:description", content: site.description },
     { property: "og:url", content: site.url },
+    { property: "og:locale", content: "en_US" },
     { property: "og:image", content: image },
+    { property: "og:image:type", content: "image/webp" },
     { property: "og:image:width", content: "1200" },
     { property: "og:image:height", content: "630" },
     { property: "og:image:alt", content: alt },
@@ -97,11 +139,21 @@ export default function Home() {
 
           <div className="pointer-events-none relative z-10 mx-auto flex w-full max-w-5xl flex-1 flex-col items-center justify-center px-5 pt-24 pb-20 text-center">
             <FadeContent blur duration={900} className="w-full">
-              <div className="mx-auto w-full max-w-3xl overflow-hidden rounded-[8px] border border-border/70 shadow-2xl shadow-black/50">
+              <div className="relative mx-auto w-full max-w-3xl overflow-hidden rounded-[8px] border border-border/70 shadow-2xl shadow-black/50">
                 <img
-                  src="/screenshot.png"
+                  src="/screenshot.webp"
                   alt="The Cherry app playing a track"
+                  width={1400}
+                  height={877}
                   className="w-full"
+                />
+                <img
+                  src="/screenshot-compact.webp"
+                  alt=""
+                  aria-hidden
+                  width={1400}
+                  height={877}
+                  className="screenshot-swap absolute top-0 left-0 w-full"
                 />
               </div>
             </FadeContent>
@@ -181,28 +233,64 @@ export default function Home() {
           </FadeContent>
 
           <div className="mt-8 flex flex-col gap-4">
-            {site.features.map((feature, i) => {
+            {site.features.map((feature: Feature, i) => {
               const Icon = FEATURE_ICONS[feature.icon]
+              const imageLeft =
+                Boolean(feature.image) &&
+                site.features.slice(0, i).filter((f: Feature) => f.image)
+                  .length %
+                  2 ===
+                  1
+
               return (
                 <FadeContent
                   key={feature.title}
                   blur
-                  delay={i * 80}
+                  delay={i * 60}
                   duration={800}
                 >
-                  <div className="flex items-start gap-4 rounded-2xl border border-border/70 bg-card/60 p-6 backdrop-blur-xl">
-                    <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary ring-1 ring-primary/20">
-                      <Icon className="size-5" />
-                    </span>
-                    <div>
-                      <h3 className="text-lg tracking-tight">
-                        {feature.title}
-                      </h3>
-                      <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
-                        {feature.body}
-                      </p>
+                  {feature.image ? (
+                    <div className="grid overflow-hidden rounded-2xl border border-border/70 bg-card/60 backdrop-blur-xl sm:h-64 sm:grid-cols-2">
+                      <div
+                        className={`flex flex-col justify-center p-6 sm:p-8 ${
+                          imageLeft ? "sm:order-2" : ""
+                        }`}
+                      >
+                        <span className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary ring-1 ring-primary/20">
+                          <Icon className="size-5" />
+                        </span>
+                        <h3 className="mt-5 text-xl tracking-tight">
+                          {feature.title}
+                        </h3>
+                        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                          {feature.body}
+                        </p>
+                      </div>
+                      <img
+                        src={feature.image}
+                        alt=""
+                        loading="lazy"
+                        decoding="async"
+                        className={`h-56 w-full object-cover sm:h-full sm:object-left-top ${
+                          imageLeft ? "sm:order-1" : ""
+                        }`}
+                      />
                     </div>
-                  </div>
+                  ) : (
+                    <div className="flex items-start gap-4 rounded-2xl border border-border/70 bg-card/60 p-6 backdrop-blur-xl">
+                      <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary ring-1 ring-primary/20">
+                        <Icon className="size-5" />
+                      </span>
+                      <div>
+                        <h3 className="text-lg tracking-tight">
+                          {feature.title}
+                        </h3>
+                        <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+                          {feature.body}
+                        </p>
+                      </div>
+                    </div>
+                  )}
                 </FadeContent>
               )
             })}
@@ -214,7 +302,13 @@ export default function Home() {
           <FadeContent blur duration={800}>
             <div className="cherry-card relative overflow-hidden rounded-3xl border border-border/70 px-8 py-14 text-center sm:px-12">
               <div className="flex flex-col items-center gap-6">
-                <img src="/icons/cherry.png" alt="" className="h-12 w-auto" />
+                <img
+                  src="/icons/cherry.webp"
+                  alt=""
+                  width={773}
+                  height={691}
+                  className="h-12 w-auto"
+                />
                 <h2 className="text-3xl tracking-tight text-balance sm:text-4xl">
                   Check it out
                 </h2>
@@ -256,6 +350,10 @@ export default function Home() {
               <img
                 src={site.highlight.image}
                 alt=""
+                width={195}
+                height={176}
+                loading="lazy"
+                decoding="async"
                 className="size-14 shrink-0 rounded-lg object-cover ring-1 ring-white/10"
               />
               <div className="min-w-0 flex-1">
