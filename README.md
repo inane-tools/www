@@ -1,8 +1,8 @@
-# Cherry website
+# inane website
 
-A small site for **Cherry**, a lightweight desktop client for YouTube Music.
-Dark and cherry-tinted, built with React + React Router (SPA mode) + Tailwind v4
-+ shadcn/ui.
+The site for **inane**, a one-person software outfit, featuring **Cherry**, a
+lightweight desktop client for YouTube Music. Monochrome black-and-white, built
+with React + React Router (SPA mode) + Tailwind v4 + shadcn/ui.
 
 ## Quick start
 
@@ -21,34 +21,33 @@ The SPA fallback for clean URLs is handled by `not_found_handling` in
 
 ## Editing the content
 
-Everything on the page (name, tagline, intro, links, features, the Q&A, the
-song highlight and the footer blurb) lives in `app/data/site.ts`. No component
-code needed.
-
-Feature entries may also set `image: "/some-screenshot.png"` to show a
-screenshot alongside the text; the image side alternates down the list.
+Everything on the page lives in `app/data/site.ts`: the site identity, links,
+nav, the about blurb, the projects list and Cherry's content (about, features,
+FAQ and disclaimer). No component code needed.
 
 The page itself is `app/routes/home.tsx`, composed of:
 
-- `app/components/layout/site-header.tsx`: sticky top nav
-- `app/components/layout/hero-dither.tsx`: the ReactBits Dither hero backdrop
-- `app/components/layout/site-footer.tsx`
+- `app/components/layout/site-sidebar.tsx`: fixed left sidebar (bottom bar on
+  mobile)
+- `app/components/layout/dither-backdrop.tsx`: the Cherry section's dither
+  backdrop
+- `app/components/sections/apps-section.tsx`: the apps grid, kept out of the
+  page for now (re-add `<AppsSection />` and the "Apps" nav item when there's
+  more than one app)
 
-Assets in `public/` (the site serves the generated `.webp` versions):
+Assets in `public/`:
 
-- `screenshot.png` / `screenshot.webp`: hero default state (the PNG is also
-  linked from the GitHub README; the site uses the WebP)
-- `screenshot-compact.png` / `.webp`: compact-sidebar shot, cross-faded
-- `icons/cherry.png` / `.webp`: app icon (PNG is the favicon; WebP is displayed)
-- `metal_pipe.jpg` / `.webp`: song-highlight art
-- `features/*`: feature screenshots (originals plus `.webp`)
-- `og.jpg`: Open Graph / embed card (1200×630)
+- `inane.svg`: the wordmark
+- `inane-favicon.svg`: favicon
+- `og-inane.jpg`: Open Graph / embed card (1200x630)
+- `screenshot.webp` / `screenshot-compact.webp`: Cherry screenshots
+- `icons/cherry.webp`: Cherry icon
 
 ## Images
 
 `npm run images` (uses `sharp`) generates the `.webp` versions the site serves
-and re-compresses `og.jpg`. It keeps the originals, so to change an image,
-replace the source in `public/` and re-run it.
+from a matching source (`screenshot*.png`, `icons/cherry.png`) and removes the
+source. Drop a new source in `public/` and re-run it.
 
 ## Adding shadcn components
 
@@ -61,10 +60,7 @@ npx shadcn@latest add <component>
 - **SPA mode**: `ssr: false` in `react-router.config.ts`. Routing is
   client-side; Cloudflare's `not_found_handling = "single-page-application"`
   provides the static-hosting fallback.
-- **Theme**: forced dark, cherry-tinted tokens in `app/app.css`
-  (`--cherry: #ff4d5e`, `--ember: #ff8a5c` on a near-black base).
-- **Fonts**: Zalando Sans Variable, self-hosted via
-  `@fontsource-variable/zalando-sans` (the same font the app uses).
-- **Animations**: ReactBits `Dither`
-  (`app/components/backgrounds/dither.tsx`, via `@react-three/fiber` and
-  `postprocessing`) in the hero, plus `FadeContent` for scroll reveals.
+- **Theme**: forced dark, monochrome tokens in `app/app.css` (white ink on a
+  near-black base, no colour).
+- **Fonts**: Gabarito Variable, self-hosted via
+  `@fontsource-variable/gabarito` (the same font the app uses).

@@ -363,7 +363,7 @@ export default function Dither({
   mouseRadius = 1,
 }: DitherProps) {
   return (
-    <div className="dither-fade h-full w-full">
+    <div className="h-full w-full">
       <Canvas
         className="relative h-full w-full"
         camera={{ position: [0, 0, 6] }}

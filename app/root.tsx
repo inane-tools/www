@@ -11,16 +11,20 @@ import type { Route } from "./+types/root"
 import "./app.css"
 
 export const links: Route.LinksFunction = () => [
-  { rel: "icon", type: "image/png", href: "/icons/cherry.png" },
+  { rel: "icon", type: "image/svg+xml", href: "/inane-favicon.svg" },
 ]
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="dark" suppressHydrationWarning>
+    <html
+      lang="en"
+      className="dark snap-y snap-mandatory"
+      suppressHydrationWarning
+    >
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="theme-color" content="#0a0607" />
+        <meta name="theme-color" content="#050505" />
         <Meta />
         <Links />
       </head>

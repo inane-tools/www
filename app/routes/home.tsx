@@ -1,12 +1,18 @@
 import type { ComponentType } from "react"
 import {
-  AppWindow,
-  Download,
-  FolderTree,
-  ListMusic,
-  Palette,
-  Pin,
-} from "lucide-react"
+  BiAlarm,
+  BiDesktop,
+  BiEdit,
+  BiFullscreen,
+  BiLink,
+  BiListUl,
+  BiLogIn,
+  BiPalette,
+  BiPlug,
+  BiSidebar,
+  BiSolidKeyboard,
+  BiWindowAlt,
+} from "react-icons/bi"
 
 import {
   Accordion,
@@ -15,13 +21,18 @@ import {
   AccordionTrigger,
 } from "~/components/ui/accordion"
 import { Button } from "~/components/ui/button"
-import { DiscordIcon } from "~/components/icons/discord-icon"
-import { LastfmIcon } from "~/components/icons/lastfm-icon"
-import { HeroDither } from "~/components/layout/hero-dither"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "~/components/ui/dialog"
 import { GitHubIcon } from "~/components/icons/github-icon"
-import { SiteFooter } from "~/components/layout/site-footer"
-import { SiteHeader } from "~/components/layout/site-header"
-import FadeContent from "~/components/react-bits/FadeContent/FadeContent"
+import { XIcon } from "~/components/icons/x-icon"
+import { SiteSidebar } from "~/components/layout/site-sidebar"
+import { DitherBackdrop } from "~/components/layout/dither-backdrop"
 import { site, type Feature } from "~/data/site"
 import type { Route } from "./+types/home"
 
@@ -29,13 +40,18 @@ const FEATURE_ICONS: Record<
   Feature["icon"],
   ComponentType<{ className?: string }>
 > = {
-  discord: DiscordIcon,
-  palette: Palette,
-  custom: AppWindow,
-  pin: Pin,
-  scrobble: LastfmIcon,
-  playlist: ListMusic,
-  folders: FolderTree,
+  custom: BiWindowAlt,
+  sidebar: BiSidebar,
+  player: BiFullscreen,
+  signin: BiLogIn,
+  library: BiEdit,
+  queue: BiListUl,
+  link: BiLink,
+  media: BiDesktop,
+  themes: BiPalette,
+  keyboard: BiSolidKeyboard,
+  sleep: BiAlarm,
+  integrations: BiPlug,
 }
 
 const jsonLd = JSON.stringify({
@@ -46,8 +62,8 @@ const jsonLd = JSON.stringify({
       "@id": `${site.url}/#organization`,
       name: site.maker.name,
       url: site.url,
-      logo: `${site.url}/icons/cherry.png`,
-      sameAs: [site.maker.href, site.maker.x, site.repo],
+      logo: `${site.url}/inane.svg`,
+      sameAs: [site.maker.href, site.maker.x],
     },
     {
       "@type": "WebSite",
@@ -59,37 +75,34 @@ const jsonLd = JSON.stringify({
     },
     {
       "@type": "SoftwareApplication",
-      "@id": `${site.url}/#app`,
-      name: site.name,
+      "@id": `${site.url}/#cherry`,
+      name: site.cherry.name,
       applicationCategory: "MultimediaApplication",
+      applicationSubCategory: "Music player",
       operatingSystem: "Windows",
-      description: site.description,
-      url: site.url,
-      image: `${site.url}${site.ogImage}`,
-      downloadUrl: site.releases,
+      softwareVersion: site.cherry.version,
+      description: site.cherry.description,
+      url: site.cherry.repo,
+      image: `${site.url}/screenshot.webp`,
+      downloadUrl: site.cherry.releases,
+      isAccessibleForFree: true,
       offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+      author: { "@id": `${site.url}/#organization` },
       publisher: { "@id": `${site.url}/#organization` },
-    },
-    {
-      "@type": "FAQPage",
-      "@id": `${site.url}/#faq`,
-      mainEntity: site.faq.map((item) => ({
-        "@type": "Question",
-        name: item.question,
-        acceptedAnswer: { "@type": "Answer", text: item.answer },
-      })),
     },
   ],
 })
 
 export function meta() {
-  const title = `${site.name} · ${site.tagline}`
+  const title = `${site.domain} - ${site.cherry.name}, a YouTube Music Client`
+  const description =
+    "Cherry is a custom YouTube Music desktop client - not a wrapper - with a fully custom UI, queue control, Discord presence and Last.fm scrobbling."
   const image = `${site.url}${site.ogImage}`
-  const alt = `${site.name} · ${site.tagline}`
   return [
     { title },
-    { name: "description", content: site.description },
+    { name: "description", content: description },
     { name: "author", content: site.maker.name },
+    { name: "application-name", content: site.name },
     {
       name: "robots",
       content:
@@ -98,21 +111,21 @@ export function meta() {
     { property: "og:type", content: "website" },
     { property: "og:site_name", content: site.name },
     { property: "og:title", content: title },
-    { property: "og:description", content: site.description },
+    { property: "og:description", content: description },
     { property: "og:url", content: site.url },
     { property: "og:locale", content: "en_US" },
     { property: "og:image", content: image },
-    { property: "og:image:type", content: "image/webp" },
+    { property: "og:image:type", content: "image/jpeg" },
     { property: "og:image:width", content: "1200" },
     { property: "og:image:height", content: "630" },
-    { property: "og:image:alt", content: alt },
+    { property: "og:image:alt", content: title },
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:site", content: "@inanetools" },
     { name: "twitter:creator", content: "@inanetools" },
     { name: "twitter:title", content: title },
-    { name: "twitter:description", content: site.description },
+    { name: "twitter:description", content: description },
     { name: "twitter:image", content: image },
-    { name: "twitter:image:alt", content: alt },
+    { name: "twitter:image:alt", content: title },
   ]
 }
 
@@ -122,257 +135,209 @@ export const links: Route.LinksFunction = () => [
 
 export default function Home() {
   return (
-    <div className="relative min-h-svh overflow-x-hidden">
+    <div className="min-h-svh md:pl-12">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: jsonLd }}
       />
-      <SiteHeader />
+      <SiteSidebar />
 
       <main>
-        {/* Hero */}
+        {/* Cherry */}
         <section
-          id="top"
-          className="relative -mt-16 flex min-h-svh flex-col overflow-hidden"
+          id="cherry"
+          className="relative flex min-h-svh snap-start snap-always items-center overflow-hidden border-b border-border/70"
         >
-          <HeroDither />
-
-          <div className="pointer-events-none relative z-10 mx-auto flex w-full max-w-5xl flex-1 flex-col items-center justify-center px-5 pt-24 pb-20 text-center">
-            <FadeContent blur duration={900} className="w-full">
-              <div className="relative mx-auto w-full max-w-3xl overflow-hidden rounded-[8px] border border-border/70 shadow-2xl shadow-black/50">
-                <img
-                  src="/screenshot.webp"
-                  alt="The Cherry app playing a track"
-                  width={1400}
-                  height={877}
-                  className="w-full"
-                />
-                <img
-                  src="/screenshot-compact.webp"
-                  alt=""
-                  aria-hidden
-                  width={1400}
-                  height={877}
-                  className="screenshot-swap absolute top-0 left-0 w-full"
-                />
-              </div>
-            </FadeContent>
-
-            <FadeContent blur delay={150} duration={900} className="mt-10">
-              <h1 className="mx-auto max-w-3xl text-5xl leading-[1.02] tracking-tight text-balance sm:text-6xl">
-                {site.tagline}
-              </h1>
-
-              <p className="mx-auto mt-5 max-w-xl text-lg leading-relaxed text-pretty text-muted-foreground">
-                {site.intro}
-              </p>
-
-              <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-                <Button
-                  asChild
-                  size="lg"
-                  className="pointer-events-auto h-11 rounded-lg border border-white/15 bg-[linear-gradient(180deg,#ff6b7a,#e0344a)] px-6 text-[0.95rem] text-white shadow-lg shadow-primary/25 hover:brightness-110"
-                >
-                  <a href={site.releases} target="_blank" rel="noreferrer">
-                    <Download />
-                    Download for Windows
-                  </a>
-                </Button>
-                <Button
-                  asChild
-                  size="lg"
-                  variant="outline"
-                  className="pointer-events-auto h-11 rounded-lg border border-border/70 bg-[linear-gradient(180deg,rgba(255,255,255,0.10),rgba(255,255,255,0.02))] px-6 text-[0.95rem] backdrop-blur-md hover:border-border hover:bg-[linear-gradient(180deg,rgba(255,255,255,0.15),rgba(255,255,255,0.04))]"
-                >
-                  <a href={site.repo} target="_blank" rel="noreferrer">
-                    <GitHubIcon className="size-4" />
-                    View source
-                  </a>
-                </Button>
-              </div>
-            </FadeContent>
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 overflow-hidden"
+          >
+            <DitherBackdrop />
+            {/* Fade in from slightly before the center of the screen. */}
+            <div className="absolute inset-0 bg-gradient-to-r from-background from-55% to-transparent" />
+            {/* Dim the dither a touch. */}
+            <div className="absolute inset-0 bg-background/40" />
           </div>
-        </section>
-
-        {/* FAQ */}
-        <section
-          id="faq"
-          className="mx-auto w-full max-w-3xl scroll-mt-24 px-5 pt-24"
-        >
-          <FadeContent blur duration={800}>
-            <h2 className="text-3xl tracking-tight text-balance sm:text-4xl">
-              What, Why, Who?
-            </h2>
-          </FadeContent>
-
-          <FadeContent blur delay={150} duration={800} className="mt-8">
-            <Accordion type="single" collapsible className="w-full">
-              {site.faq.map((item, i) => (
-                <AccordionItem key={i} value={`item-${i}`}>
-                  <AccordionTrigger className="py-4 text-lg">
-                    {item.question}
-                  </AccordionTrigger>
-                  <AccordionContent className="h-auto text-[0.95rem] leading-relaxed text-muted-foreground">
-                    {item.answer}
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
-          </FadeContent>
-        </section>
-
-        {/* Features */}
-        <section
-          id="features"
-          className="mx-auto w-full max-w-3xl scroll-mt-24 px-5 pt-24"
-        >
-          <FadeContent blur duration={800}>
-            <h2 className="text-3xl tracking-tight text-balance sm:text-4xl">
-              Features
-            </h2>
-          </FadeContent>
-
-          <div className="mt-8 flex flex-col gap-4">
-            {site.features.map((feature: Feature, i) => {
-              const Icon = FEATURE_ICONS[feature.icon]
-              const imageLeft =
-                Boolean(feature.image) &&
-                site.features.slice(0, i).filter((f: Feature) => f.image)
-                  .length %
-                  2 ===
-                  1
-
-              return (
-                <FadeContent
-                  key={feature.title}
-                  blur
-                  delay={i * 60}
-                  duration={800}
-                >
-                  {feature.image ? (
-                    <div className="grid overflow-hidden rounded-2xl border border-border/70 bg-card/60 backdrop-blur-xl sm:h-64 sm:grid-cols-2">
-                      <div
-                        className={`flex flex-col justify-center p-6 sm:p-8 ${
-                          imageLeft ? "sm:order-2" : ""
-                        }`}
-                      >
-                        <span className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary ring-1 ring-primary/20">
-                          <Icon className="size-5" />
-                        </span>
-                        <h3 className="mt-5 text-xl tracking-tight">
-                          {feature.title}
-                        </h3>
-                        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                          {feature.body}
-                        </p>
-                      </div>
-                      <img
-                        src={feature.image}
-                        alt=""
-                        loading="lazy"
-                        decoding="async"
-                        className={`h-56 w-full object-cover sm:h-full sm:object-left-top ${
-                          imageLeft ? "sm:order-1" : ""
-                        }`}
-                      />
-                    </div>
-                  ) : (
-                    <div className="flex items-start gap-4 rounded-2xl border border-border/70 bg-card/60 p-6 backdrop-blur-xl">
-                      <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary ring-1 ring-primary/20">
-                        <Icon className="size-5" />
-                      </span>
-                      <div>
-                        <h3 className="text-lg tracking-tight">
-                          {feature.title}
-                        </h3>
-                        <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
-                          {feature.body}
-                        </p>
-                      </div>
-                    </div>
-                  )}
-                </FadeContent>
-              )
-            })}
-          </div>
-        </section>
-
-        {/* Closing */}
-        <section className="mx-auto w-full max-w-3xl px-5 pt-24">
-          <FadeContent blur duration={800}>
-            <div className="cherry-card relative overflow-hidden rounded-3xl border border-border/70 px-8 py-14 text-center sm:px-12">
-              <div className="flex flex-col items-center gap-6">
+          <div className="relative z-10 mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-12 px-6 md:grid-cols-2 md:gap-20 md:px-12">
+            <div className="max-w-xl">
+              <div className="flex items-center gap-4">
                 <img
                   src="/icons/cherry.webp"
                   alt=""
                   width={773}
                   height={691}
-                  className="h-12 w-auto"
+                  className="size-12 shrink-0 object-contain"
                 />
-                <h2 className="text-3xl tracking-tight text-balance sm:text-4xl">
-                  Check it out
-                </h2>
-                <p className="max-w-sm text-pretty text-muted-foreground">
-                  The source is on GitHub. Windows-only for now.
-                </p>
-                <div className="flex flex-wrap justify-center gap-3">
-                  <Button
-                    asChild
-                    size="lg"
-                    className="h-11 rounded-lg border border-white/15 bg-[linear-gradient(180deg,#ff6b7a,#e0344a)] px-6 text-[0.95rem] text-white shadow-lg shadow-primary/25 hover:brightness-110"
+                <h1 className="text-5xl leading-[1.02] tracking-tight sm:text-6xl">
+                  {site.cherry.name}
+                </h1>
+              </div>
+              <p className="mt-6 text-lg leading-relaxed text-pretty text-muted-foreground">
+                {site.cherry.description}
+              </p>
+              <div className="mt-8 flex flex-wrap items-center gap-3">
+                <Button asChild size="lg" className="h-11 rounded-lg px-6">
+                  <a
+                    href={site.cherry.releases}
+                    target="_blank"
+                    rel="noreferrer"
                   >
-                    <a href={site.releases} target="_blank" rel="noreferrer">
-                      <Download />
-                      Download
-                    </a>
-                  </Button>
-                  <Button
-                    asChild
-                    size="lg"
-                    variant="outline"
-                    className="h-11 rounded-lg border border-border/70 bg-[linear-gradient(180deg,rgba(255,255,255,0.10),rgba(255,255,255,0.02))] px-6 text-[0.95rem] backdrop-blur-md hover:border-border hover:bg-[linear-gradient(180deg,rgba(255,255,255,0.15),rgba(255,255,255,0.04))]"
-                  >
-                    <a href={site.repo} target="_blank" rel="noreferrer">
-                      <GitHubIcon className="size-4" />
-                      View source
-                    </a>
-                  </Button>
-                </div>
+                    <GitHubIcon className="size-4" />
+                    Releases
+                  </a>
+                </Button>
+
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button
+                      variant="secondary"
+                      size="lg"
+                      className="h-11 rounded-lg px-6"
+                    >
+                      What, Why, Who?
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <div className="flex items-center gap-3">
+                        <img
+                          src="/icons/cherry.webp"
+                          alt=""
+                          width={773}
+                          height={691}
+                          className="size-8 shrink-0 object-contain"
+                        />
+                        <DialogTitle>{site.cherry.name}</DialogTitle>
+                      </div>
+                      <DialogDescription>
+                        {site.cherry.about[0]}
+                      </DialogDescription>
+                    </DialogHeader>
+
+                    <p className="text-sm leading-relaxed text-muted-foreground">
+                      {site.cherry.about[1]}
+                    </p>
+
+                    <section>
+                      <h3 className="font-heading text-lg font-bold tracking-tight">
+                        Features
+                      </h3>
+                      <div className="mt-3 divide-y divide-border/70 border-y border-border/70">
+                        {site.cherry.features.map((feature: Feature) => {
+                          const Icon = FEATURE_ICONS[feature.icon]
+                          return (
+                            <div
+                              key={feature.title}
+                              className="grid gap-x-6 gap-y-1 py-3 sm:grid-cols-[180px_1fr]"
+                            >
+                              <div className="flex items-center gap-2">
+                                <Icon className="size-4 shrink-0 text-muted-foreground" />
+                                <span className="font-heading text-sm">
+                                  {feature.title}
+                                </span>
+                              </div>
+                              <p className="text-sm leading-relaxed text-muted-foreground">
+                                {feature.body}
+                              </p>
+                            </div>
+                          )
+                        })}
+                      </div>
+                    </section>
+
+                    <section>
+                      <h3 className="font-heading text-lg font-bold tracking-tight">
+                        What, Why, Who?
+                      </h3>
+                      <Accordion
+                        type="single"
+                        collapsible
+                        className="mt-2 w-full"
+                      >
+                        {site.cherry.faq.map((item, i) => (
+                          <AccordionItem key={i} value={`item-${i}`}>
+                            <AccordionTrigger className="py-3 text-left text-sm">
+                              {item.question}
+                            </AccordionTrigger>
+                            <AccordionContent className="h-auto text-sm leading-relaxed text-muted-foreground">
+                              {item.answer}
+                            </AccordionContent>
+                          </AccordionItem>
+                        ))}
+                      </Accordion>
+                    </section>
+
+                    <section>
+                      <h3 className="font-heading text-lg font-bold tracking-tight">
+                        Disclaimer
+                      </h3>
+                      <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
+                        {site.cherry.disclaimer}
+                      </p>
+                    </section>
+
+                    <div className="flex flex-wrap gap-3">
+                      <Button asChild size="lg" className="h-11 rounded-lg px-6">
+                        <a
+                          href={site.cherry.repo}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          <GitHubIcon className="size-4" />
+                          GitHub
+                        </a>
+                      </Button>
+                    </div>
+                  </DialogContent>
+                </Dialog>
               </div>
             </div>
-          </FadeContent>
+
+            <div className="flex items-center">
+              <img
+                src="/screenshot-compact.webp"
+                alt="The Cherry app playing a track"
+                width={1400}
+                height={877}
+                className="w-full rounded-[8px] border border-border/70 md:h-[55vh] md:w-auto md:max-w-none"
+              />
+            </div>
+          </div>
         </section>
 
-        {/* Highlight */}
-        <section className="mx-auto w-full max-w-3xl px-5 pt-12">
-          <FadeContent blur duration={800}>
-            <div className="cherry-playerbar mx-auto flex w-full max-w-md items-center gap-3 rounded-xl border border-border/70 p-3 text-left backdrop-blur-md">
-              <img
-                src={site.highlight.image}
-                alt=""
-                width={195}
-                height={176}
-                loading="lazy"
-                decoding="async"
-                className="size-14 shrink-0 rounded-lg object-cover ring-1 ring-white/10"
-              />
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-medium">
-                  {site.highlight.title}
-                </p>
-                <p className="truncate text-xs text-muted-foreground">
-                  {site.highlight.artist}
-                </p>
-                <div className="mt-2 h-1 w-full overflow-hidden rounded-full bg-white/10">
-                  <div className="h-full w-1/3 rounded-full bg-[linear-gradient(90deg,#ff6b7a,#ff8a5c)]" />
-                </div>
-              </div>
+        {/* About */}
+        <section
+          id="about"
+          className="flex min-h-svh snap-start snap-always items-center border-b border-border/70 px-6 md:px-12"
+        >
+          <div className="mx-auto w-full max-w-3xl">
+            <img src="/inane.svg" alt="inane" className="h-8 w-auto" />
+            <p className="mt-6 max-w-2xl text-2xl leading-snug tracking-tight text-pretty sm:text-3xl">
+              {site.about.body}
+            </p>
+            <div className="mt-8 flex items-center gap-4">
+              <a
+                href={site.maker.x}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="inane on X"
+                className="text-muted-foreground transition-colors hover:text-foreground"
+              >
+                <XIcon className="size-5" />
+              </a>
+              <a
+                href={site.maker.href}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="inane on GitHub"
+                className="text-muted-foreground transition-colors hover:text-foreground"
+              >
+                <GitHubIcon className="size-5" />
+              </a>
             </div>
-          </FadeContent>
+          </div>
         </section>
       </main>
-
-      <SiteFooter />
     </div>
   )
 }

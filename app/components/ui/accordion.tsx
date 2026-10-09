@@ -1,8 +1,9 @@
 import * as React from "react"
 import { Accordion as AccordionPrimitive } from "radix-ui"
 
+import { BiChevronDown, BiChevronUp } from "react-icons/bi"
+
 import { cn } from "~/lib/utils"
-import { ChevronDownIcon, ChevronUpIcon } from "lucide-react"
 
 function Accordion({
   className,
@@ -46,11 +47,11 @@ function AccordionTrigger({
         {...props}
       >
         {children}
-        <ChevronDownIcon
+        <BiChevronDown
           data-slot="accordion-trigger-icon"
           className="pointer-events-none shrink-0 group-aria-expanded/accordion-trigger:hidden"
         />
-        <ChevronUpIcon
+        <BiChevronUp
           data-slot="accordion-trigger-icon"
           className="pointer-events-none hidden shrink-0 group-aria-expanded/accordion-trigger:inline"
         />

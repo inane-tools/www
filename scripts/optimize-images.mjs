@@ -1,6 +1,6 @@
 // Converts a source image dropped in public/ into the .webp version the site
-// serves, then removes the source. `public/icons/cherry.png` is kept because
-// it is also the favicon.
+// serves, then removes the source. `public/icons/cherry.png` is kept as the
+// source for the icon.
 //
 //   npm run images
 //
@@ -23,14 +23,6 @@ const jobs = [
     out: "public/icons/cherry.webp",
     keep: true,
   },
-  { in: "public/metal_pipe.jpg", out: "public/metal_pipe.webp" },
-  {
-    in: "public/features/not-wrapper.jpg",
-    out: "public/features/not-wrapper.webp",
-  },
-  { in: "public/features/theme.png", out: "public/features/theme.webp" },
-  { in: "public/features/folders.jpg", out: "public/features/folders.webp" },
-  { in: "public/og.jpg", out: "public/og.webp" },
 ]
 
 const kb = (bytes) => `${Math.round(bytes / 1024)}KB`
