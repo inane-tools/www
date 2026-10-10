@@ -336,6 +336,7 @@ function DitheredWaves({
 }
 
 interface DitherProps {
+  active?: boolean
   waveSpeed?: number
   waveFrequency?: number
   waveAmplitude?: number
@@ -350,6 +351,7 @@ interface DitherProps {
 }
 
 export default function Dither({
+  active = true,
   waveSpeed = 0.05,
   waveFrequency = 3,
   waveAmplitude = 0.3,
@@ -365,6 +367,7 @@ export default function Dither({
   return (
     <div className="h-full w-full">
       <Canvas
+        frameloop={active && !disableAnimation ? "always" : "demand"}
         className="relative h-full w-full"
         camera={{ position: [0, 0, 6] }}
         dpr={1}

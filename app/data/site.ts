@@ -77,7 +77,7 @@ export const site = {
       "Cherry is a YouTube Music desktop client that is not just another wrapper, it has a completely custom frontend, that speaks directly to YouTube Music's internal Innertube API (via youtubei.js)",
       "Since there is no official API, it uses the same endpoints that the Web Player does. Built with Tauri v2 + Rust, Svelte 5, TypeScript and Tailwind v4.",
     ],
-    version: "v1.3.0",
+    version: "v1.4.2",
     disclaimer:
       "Cherry is an unofficial client and is not affiliated with, endorsed by, or associated with YouTube, Google or YouTube Music. All trademarks and content belong to their respective owners. To use Cherry, you need your own YouTube account. You are responsible for how you use it and for any consequences, including any effect on your account. The software is provided as is, without warranty of any kind.",
 
