@@ -71,18 +71,23 @@ export const site = {
   cherry: {
     name: "Cherry",
     description:
-      "A YouTube Music desktop client that is not just another wrapper. Your music, my way.",
+      "A YouTube Music desktop client for Windows and Linux. Your music, my way.",
 
     about: [
-      "Cherry is a YouTube Music desktop client that is not just another wrapper, it has a completely custom frontend, that speaks directly to YouTube Music's internal Innertube API (via youtubei.js)",
-      "Since there is no official API, it uses the same endpoints that the Web Player does. Built with Tauri v2 + Rust, Svelte 5, TypeScript and Tailwind v4.",
+      "Cherry is a YouTube Music desktop client, it features a completely custom frontend that speaks directly to YouTube Music's internal Innertube API, Cherry uses the same endpoints that the official YouTube Music Web app does.",
+      "Built with Tauri v2 + Rust, Svelte 5, TypeScript and Tailwind v4.",
     ],
-    version: "v1.4.2",
+    version: "v1.5.0",
     disclaimer:
       "Cherry is an unofficial client and is not affiliated with, endorsed by, or associated with YouTube, Google or YouTube Music. All trademarks and content belong to their respective owners. To use Cherry, you need your own YouTube account. You are responsible for how you use it and for any consequences, including any effect on your account. The software is provided as is, without warranty of any kind.",
 
     repo: "https://github.com/inane-tools/cherry",
     releases: "https://github.com/inane-tools/cherry/releases/latest",
+    downloads: {
+      windows: "https://github.com/inane-tools/cherry/releases/download/v1.5.0/Cherry_1.5.0_x64-setup.exe",
+      flatpak: "https://github.com/inane-tools/cherry/releases/download/v1.5.0/Cherry_1.5.0_x86_64.flatpak",
+      appimage: "https://github.com/inane-tools/cherry/releases/download/v1.5.0/Cherry_1.5.0_amd64.AppImage",
+    },
 
     features: [
       {
@@ -176,12 +181,12 @@ export const site = {
       {
         question: "Which platforms are supported?",
         answer:
-          "Cherry is currently Windows only, but I might make it available on mac and linux too depending on if I feel like it.",
+          "Cherry is available for Windows and Linux (x86_64). Windows has a setup installer, and Linux has Flatpak and AppImage downloads. macOS is on the backburner for now.",
       },
       {
         question: "Where is my data stored?",
         answer:
-          "Your session is kept in the Windows credential store, settings stay on your machine, and there is no telemetry.",
+          "Your session is kept in the Windows credential store or a Secret Service keyring on Linux. Settings and caches stay on your machine, and there is no telemetry.",
       },
     ] satisfies FAQ[],
   },

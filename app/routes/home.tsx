@@ -1,6 +1,10 @@
 import type { ComponentType } from "react"
+import { DropdownMenu } from "radix-ui"
+import { FaLinux } from "react-icons/fa"
+import { SiAppimage, SiFlatpak } from "react-icons/si"
 import {
   BiAlarm,
+  BiChevronDown,
   BiDesktop,
   BiEdit,
   BiFullscreen,
@@ -79,7 +83,7 @@ const jsonLd = JSON.stringify({
       name: site.cherry.name,
       applicationCategory: "MultimediaApplication",
       applicationSubCategory: "Music player",
-      operatingSystem: "Windows",
+      operatingSystem: ["Windows", "Linux"],
       softwareVersion: site.cherry.version,
       description: site.cherry.description,
       url: site.cherry.repo,
@@ -176,16 +180,51 @@ export default function Home() {
                 {site.cherry.description}
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-3">
-                <Button asChild size="lg" className="h-11 rounded-lg px-6">
+                <Button asChild size="lg" className="h-11 items-center justify-center gap-2 rounded-lg px-6 leading-none">
                   <a
-                    href={site.cherry.releases}
-                    target="_blank"
-                    rel="noreferrer"
+                    href={site.cherry.downloads.windows}
                   >
-                    <GitHubIcon className="size-4" />
-                    Releases
+                    <svg className="size-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                      <path d="M1 1h10v10H1zM13 1h10v10H13zM1 13h10v10H1zM13 13h10v10H13z" />
+                    </svg>
+                    Windows
                   </a>
                 </Button>
+                <DropdownMenu.Root>
+                  <DropdownMenu.Trigger asChild>
+                    <Button size="lg" className="h-11 items-center justify-center gap-2 rounded-lg px-6 leading-none">
+                      <FaLinux className="size-4" aria-hidden="true" />
+                      Linux
+                      <BiChevronDown className="size-4" aria-hidden="true" />
+                    </Button>
+                  </DropdownMenu.Trigger>
+                  <DropdownMenu.Portal>
+                    <DropdownMenu.Content
+                      align="start"
+                      sideOffset={8}
+                      className="z-50 min-w-44 rounded-lg border border-border bg-card p-1 text-card-foreground shadow-lg"
+                    >
+                      <DropdownMenu.Item asChild>
+                        <a
+                          href={site.cherry.downloads.flatpak}
+                          className="flex min-h-9 items-center justify-start gap-2 rounded-md px-3 py-2 text-left text-sm leading-none outline-none data-highlighted:bg-muted"
+                        >
+                          <SiFlatpak className="size-4 shrink-0" aria-hidden="true" />
+                          Flatpak
+                        </a>
+                      </DropdownMenu.Item>
+                      <DropdownMenu.Item asChild>
+                        <a
+                          href={site.cherry.downloads.appimage}
+                          className="flex min-h-9 items-center justify-start gap-2 rounded-md px-3 py-2 text-left text-sm leading-none outline-none data-highlighted:bg-muted"
+                        >
+                          <SiAppimage className="size-4 shrink-0" aria-hidden="true" />
+                          AppImage
+                        </a>
+                      </DropdownMenu.Item>
+                    </DropdownMenu.Content>
+                  </DropdownMenu.Portal>
+                </DropdownMenu.Root>
 
                 <Dialog>
                   <DialogTrigger asChild>
@@ -291,6 +330,12 @@ export default function Home() {
                   </DialogContent>
                 </Dialog>
               </div>
+              <p className="mt-3 text-xs text-muted-foreground">
+                {site.cherry.version} · x86_64 ·{" "}
+                <a href={site.cherry.releases} target="_blank" rel="noreferrer" className="underline underline-offset-4 hover:text-foreground">
+                  Release notes
+                </a>
+              </p>
             </div>
 
             <div className="flex items-center">
