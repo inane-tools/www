@@ -25,8 +25,8 @@ export function AppsSection() {
               <img
                 src={project.icon}
                 alt=""
-                width={773}
-                height={691}
+                width={675}
+                height={675}
                 className="h-12 w-auto object-contain"
               />
             </a>

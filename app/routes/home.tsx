@@ -168,8 +168,8 @@ export default function Home() {
                 <img
                   src="/icons/cherry.webp"
                   alt=""
-                  width={773}
-                  height={691}
+                  width={675}
+                  height={675}
                   className="size-12 shrink-0 object-contain"
                 />
                 <h1 className="text-5xl leading-[1.02] tracking-tight sm:text-6xl">
@@ -242,8 +242,8 @@ export default function Home() {
                         <img
                           src="/icons/cherry.webp"
                           alt=""
-                          width={773}
-                          height={691}
+                          width={675}
+                          height={675}
                           className="size-8 shrink-0 object-contain"
                         />
                         <DialogTitle>{site.cherry.name}</DialogTitle>

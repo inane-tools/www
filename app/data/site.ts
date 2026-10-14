@@ -77,16 +77,16 @@ export const site = {
       "Cherry is a YouTube Music desktop client, it features a completely custom frontend that speaks directly to YouTube Music's internal Innertube API, Cherry uses the same endpoints that the official YouTube Music Web app does.",
       "Built with Tauri v2 + Rust, Svelte 5, TypeScript and Tailwind v4.",
     ],
-    version: "v1.5.0",
+    version: "v1.6.0",
     disclaimer:
       "Cherry is an unofficial client and is not affiliated with, endorsed by, or associated with YouTube, Google or YouTube Music. All trademarks and content belong to their respective owners. To use Cherry, you need your own YouTube account. You are responsible for how you use it and for any consequences, including any effect on your account. The software is provided as is, without warranty of any kind.",
 
     repo: "https://github.com/inane-tools/cherry",
     releases: "https://github.com/inane-tools/cherry/releases/latest",
     downloads: {
-      windows: "https://github.com/inane-tools/cherry/releases/download/v1.5.0/Cherry_1.5.0_x64-setup.exe",
-      flatpak: "https://github.com/inane-tools/cherry/releases/download/v1.5.0/Cherry_1.5.0_x86_64.flatpak",
-      appimage: "https://github.com/inane-tools/cherry/releases/download/v1.5.0/Cherry_1.5.0_amd64.AppImage",
+      windows: "https://github.com/inane-tools/cherry/releases/download/v1.6.0/Cherry_1.6.0_x64-setup.exe",
+      flatpak: "https://github.com/inane-tools/cherry/releases/download/v1.6.0/Cherry_1.6.0_x86_64.flatpak",
+      appimage: "https://github.com/inane-tools/cherry/releases/download/v1.6.0/Cherry_1.6.0_amd64.AppImage",
     },
 
     features: [
@@ -98,7 +98,7 @@ export const site = {
       {
         icon: "sidebar",
         title: "A customizable sidebar",
-        body: "One user-organised list of playlists and folders. Drag to reorder, drop a playlist onto a folder, pin favourites, resize it, or switch to a compact icon-only mode. Collapses into a drawer below ~820px.",
+        body: "Organise playlists in folders with artwork grids, pin favourites, and reorder pins within their group. Resize the sidebar or use compact icons; smaller windows use a drawer. Explore is available below Home.",
       },
       {
         icon: "player",
@@ -113,12 +113,12 @@ export const site = {
       {
         icon: "library",
         title: "Edit your library",
-        body: "Create playlists, add or remove songs, rename, edit descriptions, set cover images, pick a default save playlist, and save or unsave playlists you didn't create. Still a work in progress.",
+        body: "Create and edit playlists, change cover images, add or remove songs, choose a default save playlist, and save or unsave other playlists. Delete your own playlists with an explicit permanent-deletion confirmation.",
       },
       {
         icon: "queue",
         title: "Queue control",
-        body: "Jump to any track (dropping the ones before it), drag-reorder, remove tracks, and clear.",
+        body: "Jump to any track, drag to reorder, remove tracks, or clear the queue. Keep it open in a right sidebar when there is room; smaller windows use the player queue button.",
       },
       {
         icon: "link",
@@ -128,12 +128,12 @@ export const site = {
       {
         icon: "media",
         title: "OS media integration",
-        body: "SMTC, MPRIS and Now Playing, taskbar preview buttons, hardware media keys, and album-art-driven theming.",
+        body: "OS media controls, hardware media keys, tray playback controls and pinned playlists. Windows taskbar shortcuts show pinned and recent playlists with artwork.",
       },
       {
         icon: "themes",
         title: "Light & dark themes",
-        body: "Follow the system or pick one, with the accent taken from the album art or a custom colour, plus optional background gradients. The window title follows the current track.",
+        body: "Follow the system or choose light or dark. Use album-art or custom accents, optional tinted surfaces, and a soft two-colour backdrop. The window title follows the current track.",
       },
       {
         icon: "keyboard",
