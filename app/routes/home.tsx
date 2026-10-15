@@ -35,6 +35,7 @@ import {
 } from "~/components/ui/dialog"
 import { GitHubIcon } from "~/components/icons/github-icon"
 import { XIcon } from "~/components/icons/x-icon"
+import { BoardSection } from "~/components/sections/board-section"
 import { SiteSidebar } from "~/components/layout/site-sidebar"
 import { DitherBackdrop } from "~/components/layout/dither-backdrop"
 import { site, type Feature } from "~/data/site"
@@ -94,13 +95,27 @@ const jsonLd = JSON.stringify({
       author: { "@id": `${site.url}/#organization` },
       publisher: { "@id": `${site.url}/#organization` },
     },
+    {
+      "@type": "SoftwareApplication",
+      "@id": `${site.url}/#board`,
+      name: site.board.name,
+      softwareVersion: site.board.version,
+      downloadUrl: site.board.downloads.windows || undefined,
+      applicationCategory: "ProductivityApplication",
+      operatingSystem: "Windows",
+      description: site.board.description,
+      url: `${site.url}/#board`,
+      image: `${site.url}${site.board.screenshot}`,
+      author: { "@id": `${site.url}/#organization` },
+      publisher: { "@id": `${site.url}/#organization` },
+    },
   ],
 })
 
 export function meta() {
-  const title = `${site.domain} - ${site.cherry.name}, a YouTube Music Client`
+  const title = `${site.domain} - Cherry & Board`
   const description =
-    "Cherry is a custom YouTube Music desktop client - not a wrapper - with a fully custom UI, queue control, Discord presence and Last.fm scrobbling."
+    "Cherry, a custom YouTube Music player for Windows and Linux, and Board, a Windows app for freeform boards and journals. Built by inane.tools."
   const image = `${site.url}${site.ogImage}`
   return [
     { title },
@@ -180,11 +195,18 @@ export default function Home() {
                 {site.cherry.description}
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-3">
-                <Button asChild size="lg" className="h-11 items-center justify-center gap-2 rounded-lg px-6 leading-none">
-                  <a
-                    href={site.cherry.downloads.windows}
-                  >
-                    <svg className="size-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <Button
+                  asChild
+                  size="lg"
+                  className="h-11 items-center justify-center gap-2 rounded-lg px-6 leading-none"
+                >
+                  <a href={site.cherry.downloads.windows}>
+                    <svg
+                      className="size-4"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      aria-hidden="true"
+                    >
                       <path d="M1 1h10v10H1zM13 1h10v10H13zM1 13h10v10H1zM13 13h10v10H13z" />
                     </svg>
                     Windows
@@ -192,7 +214,10 @@ export default function Home() {
                 </Button>
                 <DropdownMenu.Root>
                   <DropdownMenu.Trigger asChild>
-                    <Button size="lg" className="h-11 items-center justify-center gap-2 rounded-lg px-6 leading-none">
+                    <Button
+                      size="lg"
+                      className="h-11 items-center justify-center gap-2 rounded-lg px-6 leading-none"
+                    >
                       <FaLinux className="size-4" aria-hidden="true" />
                       Linux
                       <BiChevronDown className="size-4" aria-hidden="true" />
@@ -209,7 +234,10 @@ export default function Home() {
                           href={site.cherry.downloads.flatpak}
                           className="flex min-h-9 items-center justify-start gap-2 rounded-md px-3 py-2 text-left text-sm leading-none outline-none data-highlighted:bg-muted"
                         >
-                          <SiFlatpak className="size-4 shrink-0" aria-hidden="true" />
+                          <SiFlatpak
+                            className="size-4 shrink-0"
+                            aria-hidden="true"
+                          />
                           Flatpak
                         </a>
                       </DropdownMenu.Item>
@@ -218,7 +246,10 @@ export default function Home() {
                           href={site.cherry.downloads.appimage}
                           className="flex min-h-9 items-center justify-start gap-2 rounded-md px-3 py-2 text-left text-sm leading-none outline-none data-highlighted:bg-muted"
                         >
-                          <SiAppimage className="size-4 shrink-0" aria-hidden="true" />
+                          <SiAppimage
+                            className="size-4 shrink-0"
+                            aria-hidden="true"
+                          />
                           AppImage
                         </a>
                       </DropdownMenu.Item>
@@ -316,7 +347,11 @@ export default function Home() {
                     </section>
 
                     <div className="flex flex-wrap gap-3">
-                      <Button asChild size="lg" className="h-11 rounded-lg px-6">
+                      <Button
+                        asChild
+                        size="lg"
+                        className="h-11 rounded-lg px-6"
+                      >
                         <a
                           href={site.cherry.repo}
                           target="_blank"
@@ -332,7 +367,12 @@ export default function Home() {
               </div>
               <p className="mt-3 text-xs text-muted-foreground">
                 {site.cherry.version} · x86_64 ·{" "}
-                <a href={site.cherry.releases} target="_blank" rel="noreferrer" className="underline underline-offset-4 hover:text-foreground">
+                <a
+                  href={site.cherry.releases}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="underline underline-offset-4 hover:text-foreground"
+                >
                   Release notes
                 </a>
               </p>
@@ -343,12 +383,14 @@ export default function Home() {
                 src="/screenshot-compact.webp"
                 alt="The Cherry app playing a track"
                 width={1400}
-                height={877}
+                height={899}
                 className="w-full rounded-[8px] border border-border/70 md:h-[55vh] md:w-auto md:max-w-none"
               />
             </div>
           </div>
         </section>
+
+        <BoardSection />
 
         {/* About */}
         <section

@@ -48,6 +48,7 @@ export const site = {
 
   nav: [
     { label: "Cherry", href: "#cherry" },
+    { label: "Board", href: "#board" },
     { label: "About", href: "#about" },
   ] satisfies { label: string; href: string }[],
 
@@ -68,6 +69,83 @@ export const site = {
     },
   ] satisfies Project[],
 
+  board: {
+    name: "Board",
+    version: "v1.0.0",
+    releases: "https://github.com/inane-tools/board/releases/tag/v1.0.0",
+    downloads: {
+      windows:
+        "https://github.com/inane-tools/board/releases/download/v1.0.0/Board_1.0.0_x64-setup.exe",
+    },
+    description:
+      "A Windows app for freeform boards and journals. Collect your ideas, files and inspiration in one place.",
+    screenshot: "/board-screenshot.webp",
+    repo: "https://github.com/inane-tools/board",
+    about: [
+      "Arrange notes, tasks, images, GIFs, videos, links and nested boards on an infinite canvas, or write in a block editor.",
+      "Built with Tauri v2 + Rust, Svelte 5, TypeScript and Tailwind v4. Board shares its interface and desktop shell with Cherry.",
+    ],
+    features: [
+      {
+        icon: "custom",
+        title: "An open canvas",
+        body: "Move and resize notes, tasks, media and files on a freeform board.",
+      },
+      {
+        icon: "library",
+        title: "Boards and journals",
+        body: "Nest boards to organize your ideas, or write with headings, lists, tasks, quotes and code.",
+      },
+      {
+        icon: "media",
+        title: "Bring your files",
+        body: "Drop files or folders onto the canvas. Paste or drag direct image, GIF and video links to import them locally.",
+      },
+      {
+        icon: "link",
+        title: "Tags and search",
+        body: "Find content across your boards and organize it with shared, colored tags.",
+      },
+      {
+        icon: "themes",
+        title: "Make it yours",
+        body: "Light and dark themes, custom accents, tinted surfaces and a movable toolbar.",
+      },
+      {
+        icon: "keyboard",
+        title: "Take things with you",
+        body: "Copy text, images and files, or drag items out to other Windows apps.",
+      },
+    ] satisfies Feature[],
+    faq: [
+      {
+        question: "What is Board?",
+        answer:
+          "A local-first space for collecting ideas and reference material, planning projects and keeping journals.",
+      },
+      {
+        question: "Who is building Board?",
+        answer:
+          "inane.tools, with AI assistance from DeepSeek on the initial app and Codex on development, fixes and interface refinements.",
+      },
+      {
+        question: "Which platforms are supported?",
+        answer:
+          "Board is being developed for Windows. Linux and macOS are not currently release targets.",
+      },
+      {
+        question: "Does Board need an account?",
+        answer:
+          "No account is required. Boards and imported files stay on your machine. Link previews and remote media use the network; your notes are not synced to a server.",
+      },
+      {
+        question: "Where can I download Board?",
+        answer:
+          "Use the Windows download button to get the NSIS setup installer from GitHub Releases. Board 1.0 is available for Windows.",
+      },
+    ] satisfies FAQ[],
+  },
+
   cherry: {
     name: "Cherry",
     description:
@@ -84,9 +162,12 @@ export const site = {
     repo: "https://github.com/inane-tools/cherry",
     releases: "https://github.com/inane-tools/cherry/releases/latest",
     downloads: {
-      windows: "https://github.com/inane-tools/cherry/releases/download/v1.6.0/Cherry_1.6.0_x64-setup.exe",
-      flatpak: "https://github.com/inane-tools/cherry/releases/download/v1.6.0/Cherry_1.6.0_x86_64.flatpak",
-      appimage: "https://github.com/inane-tools/cherry/releases/download/v1.6.0/Cherry_1.6.0_amd64.AppImage",
+      windows:
+        "https://github.com/inane-tools/cherry/releases/download/v1.6.0/Cherry_1.6.0_x64-setup.exe",
+      flatpak:
+        "https://github.com/inane-tools/cherry/releases/download/v1.6.0/Cherry_1.6.0_x86_64.flatpak",
+      appimage:
+        "https://github.com/inane-tools/cherry/releases/download/v1.6.0/Cherry_1.6.0_amd64.AppImage",
     },
 
     features: [

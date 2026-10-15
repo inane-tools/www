@@ -10,6 +10,9 @@ const NAV_ICONS: Record<string, ReactNode> = {
   "#cherry": (
     <img src="/icons/cherry.webp" alt="" className="size-5 object-contain" />
   ),
+  "#board": (
+    <img src="/icons/board.webp" alt="" className="size-5 object-contain" />
+  ),
   "#apps": <span className={DOT} />,
   "#about": <span className={DOT} />,
 }

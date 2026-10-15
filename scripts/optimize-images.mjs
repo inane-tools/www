@@ -13,6 +13,10 @@ import { existsSync } from "node:fs"
 import sharp from "sharp"
 
 const jobs = [
+  { in: "public/icons/board.png", out: "public/icons/board.webp", keep: true },
+  { in: "cherryscreen.png", out: "public/screenshot.webp", keep: true },
+  { in: "cherryscreen.png", out: "public/screenshot-compact.webp", keep: true },
+  { in: "boardscreen.png", out: "public/board-screenshot.webp", keep: true },
   { in: "public/screenshot.png", out: "public/screenshot.webp" },
   {
     in: "public/screenshot-compact.png",
