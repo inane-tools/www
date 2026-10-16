@@ -155,7 +155,7 @@ export const site = {
       "Cherry is a YouTube Music desktop client, it features a completely custom frontend that speaks directly to YouTube Music's internal Innertube API, Cherry uses the same endpoints that the official YouTube Music Web app does.",
       "Built with Tauri v2 + Rust, Svelte 5, TypeScript and Tailwind v4.",
     ],
-    version: "v1.6.0",
+    version: "v1.7.0",
     disclaimer:
       "Cherry is an unofficial client and is not affiliated with, endorsed by, or associated with YouTube, Google or YouTube Music. All trademarks and content belong to their respective owners. To use Cherry, you need your own YouTube account. You are responsible for how you use it and for any consequences, including any effect on your account. The software is provided as is, without warranty of any kind.",
 
@@ -163,11 +163,11 @@ export const site = {
     releases: "https://github.com/inane-tools/cherry/releases/latest",
     downloads: {
       windows:
-        "https://github.com/inane-tools/cherry/releases/download/v1.6.0/Cherry_1.6.0_x64-setup.exe",
+        "https://github.com/inane-tools/cherry/releases/download/v1.7.0/Cherry_1.7.0_x64-setup.exe",
       flatpak:
-        "https://github.com/inane-tools/cherry/releases/download/v1.6.0/Cherry_1.6.0_x86_64.flatpak",
+        "https://github.com/inane-tools/cherry/releases/download/v1.7.0/Cherry_1.7.0_x86_64.flatpak",
       appimage:
-        "https://github.com/inane-tools/cherry/releases/download/v1.6.0/Cherry_1.6.0_amd64.AppImage",
+        "https://github.com/inane-tools/cherry/releases/download/v1.7.0/Cherry_1.7.0_amd64.AppImage",
     },
 
     features: [
@@ -184,7 +184,7 @@ export const site = {
       {
         icon: "player",
         title: "Full-screen player",
-        body: "Click the album art to open the full-screen music view.",
+        body: "Art, Queue and Lyrics tabs over your artwork, with the selected tab remembered when collapsed. Lyrics are enabled by default, using LRCLIB first and YouTube Music as a fallback.",
       },
       {
         icon: "signin",
@@ -204,7 +204,7 @@ export const site = {
       {
         icon: "link",
         title: "Paste a link",
-        body: "Drop a YouTube or YouTube Music song or playlist URL into the search box to open it.",
+        body: "Paste a YouTube or YouTube Music song or playlist URL into search to preview it, then click to play or open it.",
       },
       {
         icon: "media",
@@ -231,6 +231,16 @@ export const site = {
         title: "Integrations",
         body: "Show what you're playing as a Discord activity, and scrobble songs to Last.fm.",
       },
+      {
+        icon: "media",
+        title: "Music videos & stations",
+        body: "Play music videos in the expanded player, with adaptive HD up to 1080p, remembered quality and optional black letterboxing. Collapse without interrupting playback, or start a station from a song.",
+      },
+      {
+        icon: "integrations",
+        title: "Signed app updates",
+        body: "Windows and AppImage installations can download signed updates from GitHub inside Cherry. Flatpak users can install the latest release bundle.",
+      },
     ] satisfies Feature[],
 
     faq: [
@@ -242,7 +252,7 @@ export const site = {
       {
         question: "Who built Cherry?",
         answer:
-          "Cherry was built by DeepSeek V4.1 Flash, an AI model, working from my ideas and feedback. From the player to the interface, the whole thing was vibe-coded, though I made the icon myself in Figma.",
+          "Cherry was built with DeepSeek and Codex, working from my ideas and feedback. The icon is my own work in Figma.",
       },
       {
         question: "Is Cherry affiliated with YouTube or Google?",

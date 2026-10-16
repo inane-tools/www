@@ -25,9 +25,9 @@ Everything on the page lives in `app/data/site.ts`: the site identity, links,
 nav, the about blurb, the projects list and Cherry's content (about, features,
 FAQ and disclaimer). No component code needed.
 
-Cherry currently features **v1.6.0 Shibetsu**, with Windows NSIS and Linux
+Cherry currently features **v1.7.0 Fukagawa**, with Windows NSIS and Linux
 Flatpak/AppImage download links, the refreshed icon, playlist management,
-the optional queue sidebar and Windows playlist shortcuts. Keep the version
+lyrics, music videos, stations, the optional queue sidebar, signed updates and Windows playlist shortcuts. Keep the version
 and all three download filenames in sync with the published GitHub release.
 
 The page itself is `app/routes/home.tsx`, composed of:
